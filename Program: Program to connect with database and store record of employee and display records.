@@ -1,0 +1,38 @@
+#Program: Program to connect with database and store record of employee and display records.
+import mysql.connector as mycon
+con = mycon.connect(host='localhost',user='root',password="")
+cur = con.cursor()
+cur.execute("create database if not exists company")
+cur.execute("use company")
+cur.execute("create table if not exists employee(empno int, name varchar(20), dept varchar(20),salary int)")
+con.commit()
+choice=None
+while choice!=0:
+    print("1. ADD RECORD ")
+    print("2. DISPLAY RECORD ")
+    print("0. EXIT")
+    choice = int(input("Enter Choice :"))
+    if choice == 1:
+        e = int(input("Enter Employee Number :"))
+        n = input("Enter Name :")
+        d = input("Enter Department :")
+        s = int(input("Enter Salary :"))
+        query="insert into employee values({},'{}','{}',{})".format(e,n,d,s)
+        cur.execute(query)
+        con.commit()
+        print("## Data Saved ##")
+elif choice == 2:
+    query="select * from employee"
+    cur.execute(query)
+    result = cur.fetchall()
+    print("%10s"%"EMPNO","%20s"%"NAME","%15s"%"DEPARTMENT","%10s"%"SALARY")
+    for row in result:
+        print("%10s"%row[0],"%20s"%row[1],"%15s"%row[2],"%10s"%row[3])
+elif choice==0:
+    con.close()
+    print("## Bye!! ##")
+else:
+    print("## INVALID CHOICE ##")
+
+
+    
